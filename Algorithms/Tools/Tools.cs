@@ -52,7 +52,7 @@ namespace Algorithms.Tools
         }
         #endregion
 
-            #region Convert color image to grayscale image
+        #region Convert color image to grayscale image
             public static Image<Gray, byte> Convert(Image<Bgr, byte> inputImage)
             {
                 Image<Gray, byte> result = inputImage.Convert<Gray, byte>();
@@ -100,6 +100,56 @@ namespace Algorithms.Tools
                     result.Data[y, inputImage.Width - 1 - x, 2] = inputImage.Data[y, x, 2];
                 }
             }
+            return result;
+        }
+        #endregion
+            
+        #region Rotate Image Clockwise
+        public static Image<Gray, byte> RotateImageClockwise ( Image<Gray,byte> inputImage)
+        {
+            Image<Gray, byte> result = new Image<Gray, byte>(inputImage.Size);
+            for(int y=0;y<inputImage.Height;++y)
+                for(int x=0;x<inputImage.Width;++x)
+                {
+                    result.Data[x, inputImage.Width - 1 - y, 0] = inputImage.Data[y, x, 0];
+                }
+            return result;
+        }
+        public static Image<Bgr, byte> RotateImageClockwise(Image<Bgr, byte> inputImage)
+        {
+            Image<Bgr, byte> result = new Image<Bgr, byte>(inputImage.Size);
+            for (int y = 0; y < inputImage.Height; ++y)
+                for (int x = 0; x < inputImage.Width; ++x)
+                {
+                    result.Data[x, inputImage.Width - 1 - y, 0] = inputImage.Data[y, x, 0];
+                    result.Data[x, inputImage.Width - 1 - y, 1] = inputImage.Data[y, x, 1];
+                    result.Data[x, inputImage.Width - 1 - y, 2] = inputImage.Data[y, x, 2];
+                }
+            return result;
+        }
+        #endregion
+
+        #region Rotate Image Anti-clockwise
+        public static Image<Gray, byte> RotateImageAntiClockwise(Image<Gray, byte> inputImage)
+        {
+            Image<Gray, byte> result = new Image<Gray, byte>(inputImage.Size);
+            for (int y = 0; y < inputImage.Height; ++y)
+                for (int x = 0; x < inputImage.Width; ++x)
+                {
+                    result.Data[inputImage.Height - 1 - x, y, 0] = inputImage.Data[y, x, 0];
+                }
+            return result;
+        }
+        public static Image<Bgr, byte> RotateImageAntiClockwise(Image<Bgr, byte> inputImage)
+        {
+            Image<Bgr, byte> result = new Image<Bgr, byte>(inputImage.Size);
+            for (int y = 0; y < inputImage.Height; ++y)
+                for (int x = 0; x < inputImage.Width; ++x)
+                {
+                    result.Data[inputImage.Height - 1 - x, y, 0] = inputImage.Data[y, x, 0];
+                    result.Data[inputImage.Height - 1 - x, y, 1] = inputImage.Data[y, x, 1];
+                    result.Data[inputImage.Height - 1 - x, y, 2] = inputImage.Data[y, x, 2];
+                }
             return result;
         }
         #endregion

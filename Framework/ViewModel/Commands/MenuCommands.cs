@@ -598,7 +598,77 @@ namespace Framework.ViewModel
             }
         }
         #endregion
+        #region Rotate Image Clockwise
+        private ICommand _rotateClockwiseImageCommand;
 
+        public ICommand RotateClockwiseImageCommand
+        {
+            get
+            {
+                if (_rotateClockwiseImageCommand == null)
+                    _rotateClockwiseImageCommand = new RelayCommand(RotateImageClockwise);
+                return _rotateClockwiseImageCommand;
+            }
+
+        }
+
+        private void RotateImageClockwise(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+            ClearProcessedCanvas(parameter as Canvas);
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Tools.RotateImageClockwise(GrayInitialImage);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = Tools.RotateImageClockwise(ColorInitialImage);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Rotate Image Anti-Clockwise
+        private ICommand _rotateAntiClockwiseImageCommand;
+
+        public ICommand RotateAntiClockwiseImageCommand
+        {
+            get
+            {
+                if (_rotateClockwiseImageCommand == null)
+                    _rotateClockwiseImageCommand = new RelayCommand(RotateImageAntiClockwise);
+                return _rotateClockwiseImageCommand;
+            }
+
+        }
+
+        private void RotateImageAntiClockwise(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+            ClearProcessedCanvas(parameter as Canvas);
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Tools.RotateImageAntiClockwise(GrayInitialImage);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = Tools.RotateImageAntiClockwise(ColorInitialImage);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+        #endregion
         #region Convert color image to grayscale image
         private ICommand _convertImageToGrayscaleCommand;
         public ICommand ConvertImageToGrayscaleCommand
@@ -636,7 +706,130 @@ namespace Framework.ViewModel
         #endregion
 
         #region Pointwise operations
+        #region Contrast and Brightness
+        private ICommand _contrastBrightnessCommand;
+        public ICommand ContrastBrightnessCommand
+        {
+            get
+            {
+                if (_contrastBrightnessCommand == null)
+                    _contrastBrightnessCommand = new RelayCommand(ContrastBrightness);
+                return _contrastBrightnessCommand;
+            }
+        }
+
+        private void ContrastBrightness(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> label = new List<string>
+            {
+                "Insert contrast value (0.1-3.0)",
+                "Insert brightness value (-100 to 100)"
+            };
+    
+            DialogWindow dialog = new DialogWindow(_mainVM, label);
+
+            dialog.ShowDialog();
+
+            double contrastDouble = dialog.GetValues()[0];
+            double brightnessDouble = dialog.GetValues()[1];
+
+            if (contrastDouble < 0.1 || contrastDouble > 3.0 ||
+                brightnessDouble < -100 || brightnessDouble > 100)
+            {
+                MessageBox.Show("Please input valid contrast and brightness values");
+                return;
+            }
+
+            float alpha = (float)contrastDouble;
+            float beta = (float)brightnessDouble;
+
+            byte[] lut = PointwiseOperations.CreateLinearOpLUT(alpha, beta);
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage =
+                    PointwiseOperations.ApplyLUTGray(GrayInitialImage, lut);
+
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage =
+                    PointwiseOperations.ApplyLUTColor(ColorInitialImage, lut);
+
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+
         #endregion
+
+        #region Gamma
+        private ICommand _gammaCommand;
+        public ICommand GammaCommand
+        {
+            get
+            {
+                if (_gammaCommand == null)
+                    _gammaCommand = new RelayCommand(GammaOperator);
+                return _gammaCommand;
+            }
+        }
+
+        private void GammaOperator(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> label = new List<string>
+            {
+                "Insert gamma value (>0)"
+            };
+
+            DialogWindow dialog = new DialogWindow(_mainVM, label);
+
+            dialog.ShowDialog();
+
+            double gammaDouble = dialog.GetValues()[0];
+
+            if (gammaDouble <= 0)
+            {
+                MessageBox.Show("Gamma must be strictly positive");
+                return;
+            }
+
+            float gamma = (float)gammaDouble;
+
+            byte[] lut = PointwiseOperations.CreateGammaLUT(gamma);
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = PointwiseOperations.ApplyLUTGray(GrayInitialImage, lut);
+
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = PointwiseOperations.ApplyLUTColor(ColorInitialImage, lut);
+
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+        #endregion
+        #endregion
+
 
         #region Thresholding
         #endregion

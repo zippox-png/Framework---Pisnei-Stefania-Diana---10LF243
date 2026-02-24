@@ -173,6 +173,15 @@
                           Foreground="#1E1E1E"
                           Command="{Binding Path=MenuCommands.MirrorImageCommand}"
                           CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                <MenuItem Header="Rotate Image Clockwise" 
+                          Foreground="#1E1E1E"
+                          Command="{Binding Path=MenuCommands.RotateClockwiseImageCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+
+                <MenuItem Header="Rotate Image Anti - Clockwise" 
+                          Foreground="#1E1E1E"
+                          Command="{Binding Path=MenuCommands.RotateAntiClockwiseImageCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
                 <!--Separator/-->
 
 
@@ -181,7 +190,15 @@
             <MenuItem Header="Pointwise operations"
                       Background="{Binding Path=Theme.MenuItemBackgroundColor}"
                       Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
-
+                <MenuItem Header="Contrast and brightness" 
+                          Foreground="#1E1E1E"
+                          Command="{Binding Path=MenuCommands.ContrastBrightnessCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                <Separator/>
+                <MenuItem Header="Gamma"
+                          Foreground="#1E1E1E"
+                          Command="{Binding Path=MenuCommands.GammaCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
             </MenuItem>
 
             <MenuItem Header="Thresholding"
