@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\stefa\\Downloads\\Framework\\Framework\\Framework.csproj": {}
+    "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Framework\\Framework.csproj": {}
   },
   "projects": {
-    "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj": {
+    "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj",
+        "projectUniqueName": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj",
         "projectName": "Algorithms",
-        "projectPath": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj",
+        "projectPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj",
         "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\obj\\",
+        "outputPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "UsingMicrosoftNETSdk": false,
@@ -66,14 +66,14 @@
         }
       }
     },
-    "C:\\Users\\stefa\\Downloads\\Framework\\Framework\\Framework.csproj": {
+    "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Framework\\Framework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stefa\\Downloads\\Framework\\Framework\\Framework.csproj",
+        "projectUniqueName": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Framework\\Framework.csproj",
         "projectName": "Framework",
-        "projectPath": "C:\\Users\\stefa\\Downloads\\Framework\\Framework\\Framework.csproj",
+        "projectPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Framework\\Framework.csproj",
         "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stefa\\Downloads\\Framework\\Framework\\obj\\",
+        "outputPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Framework\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "UsingMicrosoftNETSdk": false,
@@ -95,8 +95,8 @@
         "frameworks": {
           "net48": {
             "projectReferences": {
-              "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj": {
-                "projectPath": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj"
+              "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj": {
+                "projectPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj"
               }
             }
           }

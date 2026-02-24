@@ -159,5 +159,10 @@ namespace Framework.View
             Properties.Settings.Default.Theme = selectedTheme;
             Properties.Settings.Default.Save();
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

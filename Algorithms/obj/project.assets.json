@@ -519,11 +519,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj",
+      "projectUniqueName": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj",
       "projectName": "Algorithms",
-      "projectPath": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\Algorithms.csproj",
+      "projectPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\Algorithms.csproj",
       "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\stefa\\Downloads\\Framework\\Algorithms\\obj\\",
+      "outputPath": "C:\\Users\\stefa\\Desktop\\PID\\Framework---Pisnei-Stefania-Diana---10LF243\\Algorithms\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "UsingMicrosoftNETSdk": false,
