@@ -286,7 +286,58 @@ namespace Framework.ViewModel
         #endregion
 
         #region Tools
+        #region Binary image
+        private ICommand _binaryImageCommand;
+        public ICommand BinaryImageCommand
+        {
+            get
+            {
+                if (_binaryImageCommand == null)
+                    _binaryImageCommand = new RelayCommand(BinaryImage);
+                return _binaryImageCommand;
+            }
+        }
 
+        
+        private void BinaryImage(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+                      
+            List<string> labels = new List<string>
+            {
+                "Thresholding:"
+            };
+
+            DialogWindow window = new DialogWindow(_mainVM, labels);
+            window.ShowDialog();
+
+            List<double> values = window.GetValues();
+            if (values[0] < 10 || values[0] > 145)
+            {
+                MessageBox.Show("Threshold value must be between 10 and 145!");
+                return;
+            }
+             byte T = (byte)values[0];
+            
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Tools.Binary(GrayInitialImage,T);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                GrayProcessedImage = Tools.Convert(ColorInitialImage);
+                GrayProcessedImage = Tools.Binary(GrayProcessedImage, T);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+        #endregion
         #region Magnifier
         private ICommand _magnifierCommand;
         public ICommand MagnifierCommand
@@ -510,6 +561,39 @@ namespace Framework.ViewModel
             else if (ColorInitialImage != null)
             {
                 ColorProcessedImage = Tools.Invert(ColorInitialImage);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Mirror
+        private ICommand _mirrorImageCommand;
+        public ICommand MirrorImageCommand
+        {
+            get
+            {
+                if (_mirrorImageCommand == null)
+                    _mirrorImageCommand = new RelayCommand(Mirror);
+                return _mirrorImageCommand;
+            }
+        }
+        private void Mirror(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+            ClearProcessedCanvas(parameter as Canvas);
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Tools.Mirror(GrayInitialImage); 
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = Tools.Mirror(ColorInitialImage); 
                 ProcessedImage = Convert(ColorProcessedImage);
             }
         }

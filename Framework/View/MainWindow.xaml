@@ -119,7 +119,7 @@
 
             <MenuItem Header="Tools" 
                       Background="{Binding Path=Theme.MenuItemBackgroundColor}"
-                      Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
+                      Foreground="{Binding Path=Theme.MenuItemForegroundColor}" Click="MenuItem_Click">
                 <MenuItem Header="Theme"
                           Foreground="#1E1E1E"
                           x:Name="themeMenu">
@@ -164,6 +164,14 @@
                 <MenuItem Header="Convert to grayscale"
                           Foreground="#1E1E1E"
                           Command="{Binding Path=MenuCommands.ConvertImageToGrayscaleCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                <MenuItem Header="Binarization" 
+                          Foreground="#1E1E1E"
+                          Command="{Binding Path=MenuCommands.BinaryImageCommand}"
+                          CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+                <MenuItem Header="Mirror" 
+                          Foreground="#1E1E1E"
+                          Command="{Binding Path=MenuCommands.MirrorImageCommand}"
                           CommandParameter="{Binding ElementName=processedImageCanvas}"/>
                 <!--Separator/-->
 

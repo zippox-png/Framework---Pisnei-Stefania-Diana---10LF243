@@ -1,0 +1,8 @@
+/.vs
+*.dll
+*.dll
+*.pdb
+*.json
+*.props
+/Algorithms
+*.cache
