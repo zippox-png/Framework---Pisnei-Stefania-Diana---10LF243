@@ -1,5 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using System;
+using System.Drawing;
 using System.Linq.Expressions;
 
 namespace Algorithms.Tools
@@ -153,5 +155,68 @@ namespace Algorithms.Tools
             return result;
         }
         #endregion
+
+        #region Crop
+        public static Image<Gray, byte> Crop(Image<Gray, byte> inputImage, Rectangle roi)
+        {
+            if (roi.X < 0 || roi.Y < 0 ||
+                roi.Right > inputImage.Width ||
+                roi.Bottom > inputImage.Height)
+                throw new ArgumentException("ROI is outside image bounds.");
+
+            Image<Gray, byte> result = new Image<Gray, byte>(roi.Width, roi.Height);
+
+            for (int y = 0; y < roi.Height; ++y)
+            {
+                for (int x = 0; x < roi.Width; ++x)
+                {
+                    result.Data[y, x, 0] =
+                        inputImage.Data[roi.Y + y, roi.X + x, 0];
+                }
+            }
+
+            return result;
+        }
+
+        public static Image<Bgr, byte> Crop(Image<Bgr, byte> inputImage, Rectangle roi)
+        {
+            if (roi.X < 0 || roi.Y < 0 ||
+                roi.Right > inputImage.Width ||
+                roi.Bottom > inputImage.Height)
+                throw new ArgumentException("ROI is outside image bounds.");
+
+            Image<Bgr, byte> result = new Image<Bgr, byte>(roi.Width, roi.Height);
+
+            for (int y = 0; y < roi.Height; ++y)
+            {
+                for (int x = 0; x < roi.Width; ++x)
+                {
+                    result.Data[y, x, 0] =
+                        inputImage.Data[roi.Y + y, roi.X + x, 0];
+                    result.Data[y, x, 1] =
+                        inputImage.Data[roi.Y + y, roi.X + x, 1];
+                    result.Data[y, x, 2] =
+                        inputImage.Data[roi.Y + y, roi.X + x, 2];
+                }
+            }
+
+            return result;
+        }
+        public static void ComputeStats(Image<Gray, byte> img,
+                                out double mean,
+                                out double stdDev)
+        {
+
+            MCvScalar m = new MCvScalar();
+            MCvScalar s = new MCvScalar();
+            CvInvoke.MeanStdDev(img, ref m, ref s);
+
+            mean = m.V0;
+            stdDev = s.V0;
+        }
+
+
+        #endregion
+
     }
 }

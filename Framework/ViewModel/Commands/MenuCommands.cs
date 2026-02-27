@@ -1,23 +1,21 @@
-﻿using Emgu.CV;
+﻿using Algorithms.Sections;
+using Algorithms.Tools;
+using Algorithms.Utilities;
+using Emgu.CV;
 using Emgu.CV.Structure;
-
-using System.Windows;
+using Framework.View;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Controls;
-using System.Collections.Generic;
-
-using Framework.View;
+using static Framework.Converters.ImageConverter;
 using static Framework.Utilities.DataProvider;
 using static Framework.Utilities.DrawingHelper;
 using static Framework.Utilities.FileHelper;
-using static Framework.Converters.ImageConverter;
-
-using Algorithms.Sections;
-using Algorithms.Tools;
-using Algorithms.Utilities;
 
 namespace Framework.ViewModel
 {
@@ -828,6 +826,130 @@ namespace Framework.ViewModel
             }
         }
         #endregion
+        #endregion
+
+        #region Crop
+        private ICommand _cropCommand;
+        public ICommand CropCommand
+        {
+            get
+            {
+                if (_cropCommand == null)
+                    _cropCommand = new RelayCommand(Crop);
+                return _cropCommand;
+            }
+        }
+        private void ShowStatistics(Image<Gray, byte> img)
+        {
+            using (Mat mean = new Mat())
+            using (Mat std = new Mat())
+            {
+                CvInvoke.MeanStdDev(img, mean, std);
+
+                double meanValue = mean.GetData().Length >= sizeof(double) ? BitConverter.ToDouble(mean.GetData(), 0) : 0.0;
+                double stdValue = std.GetData().Length >= sizeof(double) ? BitConverter.ToDouble(std.GetData(), 0) : 0.0;
+
+                MessageBox.Show(
+                    $"Mean: {meanValue:F2}\nStdDev: {stdValue:F2}",
+                    "Crop Statistics");
+            }
+        }
+        private void ShowStatistics(Image<Bgr, byte> img)
+        {
+            using (Mat mean = new Mat())
+            using (Mat std = new Mat())
+            {
+                CvInvoke.MeanStdDev(img, mean, std);
+
+                byte[] meanBytes = mean.GetData();
+                byte[] stdBytes = std.GetData();
+
+                double meanB = meanBytes.Length >= sizeof(double) * 1 ? BitConverter.ToDouble(meanBytes, 0) : 0.0;
+                double meanG = meanBytes.Length >= sizeof(double) * 2 ? BitConverter.ToDouble(meanBytes, sizeof(double)) : 0.0;
+                double meanR = meanBytes.Length >= sizeof(double) * 3 ? BitConverter.ToDouble(meanBytes, sizeof(double) * 2) : 0.0;
+
+                double stdB = stdBytes.Length >= sizeof(double) * 1 ? BitConverter.ToDouble(stdBytes, 0) : 0.0;
+                double stdG = stdBytes.Length >= sizeof(double) * 2 ? BitConverter.ToDouble(stdBytes, sizeof(double)) : 0.0;
+                double stdR = stdBytes.Length >= sizeof(double) * 3 ? BitConverter.ToDouble(stdBytes, sizeof(double) * 2) : 0.0;
+
+                MessageBox.Show(
+                    $"Mean BGR:\nB: {meanB:F2} G: {meanG:F2} R: {meanR:F2}\n\n" +
+                    $"StdDev BGR:\nB: {stdB:F2} G: {stdG:F2} R: {stdR:F2}",
+                    "Crop Statistics");
+            }
+        }
+        private void Crop(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            if (MouseClickCollection.Count < 2)
+            {
+                MessageBox.Show("Please select an area first!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            var p1 = MouseClickCollection[0];
+            var p2 = MouseClickCollection[1];
+
+            int x = (int)Math.Min(p1.X, p2.X);
+            int y = (int)Math.Min(p1.Y, p2.Y);
+            int width = (int)Math.Abs(p1.X - p2.X);
+            int height = (int)Math.Abs(p1.Y - p2.Y);
+
+            System.Drawing.Rectangle roi = new System.Drawing.Rectangle(x, y, width, height);
+            try
+            {
+                if (GrayInitialImage != null)
+                {
+                    GrayProcessedImage = Tools.Crop(GrayInitialImage, roi);
+                    ProcessedImage = Convert(GrayProcessedImage);
+
+                    ShowStatistics(GrayProcessedImage);
+                }
+                else if (ColorInitialImage != null)
+                {
+                    ColorProcessedImage = Tools.Crop(ColorInitialImage, roi);
+                    ProcessedImage = Convert(ColorProcessedImage);
+
+                    ShowStatistics(ColorProcessedImage);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            MouseClickCollection.Clear();
+        }
+
+        private void ApplyCrop(System.Drawing.Rectangle roi)
+        {
+            try
+            {
+                if (GrayInitialImage != null)
+                {
+                    GrayProcessedImage = Tools.Crop(GrayInitialImage, roi);
+                    ProcessedImage = Convert(GrayProcessedImage);
+                    ShowStatistics(GrayProcessedImage);
+                }
+                else if (ColorInitialImage != null)
+                {
+                    ColorProcessedImage = Tools.Crop(ColorInitialImage, roi);
+                    ProcessedImage = Convert(ColorProcessedImage);
+                    ShowStatistics(ColorProcessedImage);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         #endregion
 
 
