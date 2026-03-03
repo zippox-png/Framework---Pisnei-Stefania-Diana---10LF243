@@ -952,6 +952,62 @@ namespace Framework.ViewModel
 
         #endregion
 
+        #region Piecewise contrast
+
+        private ICommand _piecewiseLinearContrastCommand;
+        public ICommand PiecewiseLinearContrastCommand
+        {
+            get
+            {
+                if (_piecewiseLinearContrastCommand == null)
+                    _piecewiseLinearContrastCommand = new RelayCommand(PiecewiseLinearContrast);
+                return _piecewiseLinearContrastCommand;
+            }
+        }
+
+        private void PiecewiseLinearContrast(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image first!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string>
+    {
+        "r1:", "r2:", "s1:", "s2:"
+    };
+
+            DialogWindow window = new DialogWindow(_mainVM, labels);
+            window.ShowDialog();
+            List<double> values = window.GetValues();
+
+            int r1 = (int)values[0];
+            int r2 = (int)values[1];
+            int s1 = (int)values[2];
+            int s2 = (int)values[3];
+
+            if (!(0 <= r1 && r1 < r2 && r2 <= 255 && 0 <= s1 && s1 < s2 && s2 <= 255))
+            {
+                MessageBox.Show("Invalid values! Must satisfy: 0<=r1<r2<=255, 0<=s1<s2<=255");
+                return;
+            }
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = PointwiseOperations.PiecewiseLinear(GrayInitialImage, r1, r2, s1, s2);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = PointwiseOperations.PiecewiseLinear(ColorInitialImage, r1, r2, s1, s2);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+
+        #endregion
 
         #region Thresholding
         #endregion
