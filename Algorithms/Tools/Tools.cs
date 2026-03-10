@@ -60,20 +60,24 @@ namespace Algorithms.Tools
                 Image<Gray, byte> result = inputImage.Convert<Gray, byte>();
                 return result;
             }
-            #endregion
+        #endregion
 
         #region Binary
-        public static Image<Gray,byte> Binary(Image<Gray, byte> inputImage,byte T)
+        public static Image<Gray, byte> Binary(Image<Gray, byte> inputImage, byte T)
         {
             Image<Gray, byte> result = new Image<Gray, byte>(inputImage.Size);
 
-            for (int y = 0; y < inputImage.Height; ++y)
+            for (int y = 0; y < inputImage.Height; y++)
             {
-                for (int x = 0; x < inputImage.Width; ++x)
-                    if(inputImage.Data[y, x, 0] > T)
-                       result.Data[y, x, 0] = 255;
-
+                for (int x = 0; x < inputImage.Width; x++)
+                {
+                    if (inputImage.Data[y, x, 0] > T)
+                        result.Data[y, x, 0] = 255;
+                    else
+                        result.Data[y, x, 0] = 0;
+                }
             }
+
             return result;
         }
 

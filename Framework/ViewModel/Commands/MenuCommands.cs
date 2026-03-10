@@ -1010,6 +1010,47 @@ namespace Framework.ViewModel
         #endregion
 
         #region Thresholding
+
+        #region Otsu Threshold
+        private ICommand _otsuThresholdCommand;
+        public ICommand OtsuThresholdCommand
+        {
+            get
+            {
+                if (_otsuThresholdCommand == null)
+                    _otsuThresholdCommand = new RelayCommand(OtsuThreshold);
+                return _otsuThresholdCommand;
+            }
+        }
+
+        private void OtsuThreshold(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            byte T;
+
+            if (GrayInitialImage != null)
+            {
+                T = Thresholding.OtsuThreshold(GrayInitialImage);
+                GrayProcessedImage = Tools.Binary(GrayInitialImage, T);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                GrayProcessedImage = Tools.Convert(ColorInitialImage);
+                T = Thresholding.OtsuThreshold(GrayProcessedImage);
+                GrayProcessedImage = Tools.Binary(GrayProcessedImage, T);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Filters
