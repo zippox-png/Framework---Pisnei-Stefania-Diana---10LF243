@@ -243,7 +243,10 @@ namespace Framework.ViewModel
 
         private void ClearProcessedCanvas(object parameter)
         {
-            RemoveUiElements(parameter as Canvas);
+            if (parameter is Canvas canvas)
+            {
+                RemoveUiElements(canvas);
+            }
 
             GrayProcessedImage = null;
             ColorProcessedImage = null;
@@ -1054,6 +1057,161 @@ namespace Framework.ViewModel
         #endregion
 
         #region Filters
+
+        #region Separable filter
+        private ICommand _separableFilterCommand;
+        public ICommand SeparableFilterCommand
+        {
+            get
+            {
+                if (_separableFilterCommand == null)
+                    _separableFilterCommand = new RelayCommand(SeparableFilter);
+                return _separableFilterCommand;
+            }
+        }
+
+        private void SeparableFilter(object parameter)
+        {
+            if (InitialImage == null) return;
+            ClearProcessedCanvas(parameter as Canvas);
+
+            double[,] v = { { 0.25, 0.5, 0.25 } };
+            double[,] vT = { { 0.25 }, { 0.5 }, { 0.25 } };
+
+            if (ColorInitialImage != null)
+            {
+                var tempImage = Filters.ApplyFilterColor(ColorInitialImage, v);
+                ColorProcessedImage = Filters.ApplyFilterColor(tempImage, vT);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                var tempImage = Filters.ApplyFilterGray(GrayInitialImage, v);
+                GrayProcessedImage = Filters.ApplyFilterGray(tempImage, vT);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Blur filter
+        private ICommand _blurFilterCommand;
+        public ICommand BlurFilterCommand
+        {
+            get
+            {
+                if (_blurFilterCommand == null)
+                    _blurFilterCommand = new RelayCommand(BlurFilter);
+                return _blurFilterCommand;
+            }
+        }
+
+        private void BlurFilter(object parameter)
+        {
+            if (InitialImage == null) return;
+            ClearProcessedCanvas(parameter as Canvas);
+
+            double[,] blurMatrix = { { 0.1, 0.1, 0.1 }, { 0.1, 0.2, 0.1 }, { 0.1, 0.1, 0.1 } };
+
+            if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = Filters.ApplyFilterColor(ColorInitialImage, blurMatrix);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Filters.ApplyFilterGray(GrayInitialImage, blurMatrix);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Sharpen filter
+        private ICommand _sharpenFilterCommand;
+        public ICommand SharpenFilterCommand
+        {
+            get
+            {
+                if (_sharpenFilterCommand == null)
+                    _sharpenFilterCommand = new RelayCommand(SharpenFilter);
+                return _sharpenFilterCommand;
+            }
+        }
+
+        private void SharpenFilter(object parameter)
+        {
+            if (InitialImage == null) return;
+            ClearProcessedCanvas(parameter as Canvas);
+
+            double[,] sharpenMatrix = { { 0, -1, 0 }, { -1, 5, -1 }, { 0, -1, 0 } };
+
+            if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = Filters.ApplyFilterColor(ColorInitialImage, sharpenMatrix);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Filters.ApplyFilterGray(GrayInitialImage, sharpenMatrix);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Gaussian filter
+        private ICommand _gaussianFilterCommand;
+        public ICommand GaussianFilterCommand
+        {
+            get
+            {
+                if (_gaussianFilterCommand == null)
+                    _gaussianFilterCommand = new RelayCommand(GaussianFilter);
+                return _gaussianFilterCommand;
+            }
+        }
+
+        private void GaussianFilter(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string>
+            {
+                "Alege qx (>0):",
+                "Alege qy (>0):"
+            };
+
+            DialogWindow window = new DialogWindow(_mainVM, labels);
+            window.ShowDialog();
+
+            List<double> values = window.GetValues();
+
+            double qx = values[0];
+            double qy = values[1];
+
+            if (qx <= 0 || qy <= 0)
+            {
+                MessageBox.Show("qx si qy trebuie sa fie strict pozitive.");
+                return;
+            }
+
+            if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = Filters.GaussFiltering(GrayInitialImage, qx, qy);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (ColorInitialImage != null)
+            {
+                ColorProcessedImage = Filters.GaussFiltering(ColorInitialImage, qx, qy);
+                ProcessedImage = Convert(ColorProcessedImage);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Morphological operations
