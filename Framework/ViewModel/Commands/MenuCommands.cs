@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.VisualBasic;
 using static Framework.Converters.ImageConverter;
 using static Framework.Utilities.DataProvider;
 using static Framework.Utilities.DrawingHelper;
@@ -1210,6 +1211,92 @@ namespace Framework.ViewModel
                 ProcessedImage = Convert(ColorProcessedImage);
             }
         }
+        #endregion
+
+        #region Laplace filter
+        #region Laplace Highlight
+        private ICommand _laplaceHighlightCommand;
+        public ICommand LaplaceHighlightCommand
+        {
+            get
+            {
+                if (_laplaceHighlightCommand == null)
+                    _laplaceHighlightCommand = new RelayCommand(LaplaceHighlight);
+                return _laplaceHighlightCommand;
+            }
+        }
+        private void LaplaceHighlight(object parameter)
+        {
+            if (InitialImage == null) return;
+            ClearProcessedCanvas(parameter as Canvas);
+
+            var choice = MessageBox.Show(
+                "Alege masca:\nYes = Laplace1\nNo = Laplace2",
+                "Laplace Variant",
+                MessageBoxButton.YesNo);
+
+            int variant = (choice == MessageBoxResult.Yes) ? 1 : 2;
+
+            if (ColorInitialImage != null)
+            {
+                var gray = ColorInitialImage.Convert<Gray, byte>();
+                var result = Filters.HighlightLaplaceValues(gray, variant);
+
+                GrayProcessedImage = result;
+                ProcessedImage = Convert(result);
+            }
+            else if (GrayInitialImage != null)
+            {
+                var result = Filters.HighlightLaplaceValues(GrayInitialImage, variant);
+
+                GrayProcessedImage = result;
+                ProcessedImage = Convert(result);
+            }
+        }
+        #endregion
+        #region Laplace Zero Crossing
+        private ICommand _laplaceZeroCrossingCommand;
+        public ICommand LaplaceZeroCrossingCommand
+        {
+            get
+            {
+                if (_laplaceZeroCrossingCommand == null)
+                    _laplaceZeroCrossingCommand = new RelayCommand(LaplaceZeroCrossing);
+                return _laplaceZeroCrossingCommand;
+            }
+        }
+        private void LaplaceZeroCrossing(object parameter)
+        {
+            if (InitialImage == null) return;
+            ClearProcessedCanvas(parameter as Canvas);
+
+            var choice = MessageBox.Show(
+                "Alege masca:\nYes = Laplace1\nNo = Laplace2",
+                "Laplace Variant",
+                MessageBoxButton.YesNo);
+
+            int variant = (choice == MessageBoxResult.Yes) ? 1 : 2;
+
+            int threshold = 10; 
+
+            if (ColorInitialImage != null)
+            {
+                var gray = ColorInitialImage.Convert<Gray, byte>();
+                var result = Filters.LaplaceZeroCrossing(gray, variant, threshold);
+
+                GrayProcessedImage = result;
+                ProcessedImage = Convert(result);
+            }
+            else if (GrayInitialImage != null)
+            {
+                var result = Filters.LaplaceZeroCrossing(GrayInitialImage, variant, threshold);
+
+                GrayProcessedImage = result;
+                ProcessedImage = Convert(result);
+            }
+        }
+        #endregion
+
         #endregion
 
         #endregion

@@ -250,9 +250,21 @@
                 </MenuItem>
 
                 <MenuItem Header="High-pass" Foreground="#1E1E1E">
+
                     <MenuItem Header="Sharpen Filter"
-                  Command="{Binding Path=MenuCommands.SharpenFilterCommand}"
-                  CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+              Command="{Binding Path=MenuCommands.SharpenFilterCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+
+                    <Separator/>
+
+                    <MenuItem Header="Laplace Evidentiere valori"
+              Command="{Binding Path=MenuCommands.LaplaceHighlightCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+
+                    <MenuItem Header="Laplace Zero Crossing"
+              Command="{Binding Path=MenuCommands.LaplaceZeroCrossingCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"/>
+
                 </MenuItem>
 
             </MenuItem>
