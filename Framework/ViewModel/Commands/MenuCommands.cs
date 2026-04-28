@@ -1302,6 +1302,221 @@ namespace Framework.ViewModel
         #endregion
 
         #region Morphological operations
+        #region Morphological Dilation
+        private ICommand _dilateCommand;
+        public ICommand DilateCommand
+        {
+            get
+            {
+                if (_dilateCommand == null)
+                    _dilateCommand = new RelayCommand(DilateFilter);
+                return _dilateCommand;
+            }
+        }
+
+        private void DilateFilter(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string> {
+        "Insert Mask Height (h)",
+        "Insert Mask Width (w)",
+        "Insert Threshold (T) [0-255]",
+        "Insert Option (1=White, 0=Black)"
+    };
+
+            DialogWindow dialog = new DialogWindow(_mainVM, labels);
+            dialog.ShowDialog();
+
+            int h = (int)dialog.GetValues()[0];
+            int w = (int)dialog.GetValues()[1];
+            int t = (int)dialog.GetValues()[2];
+            int option = (int)dialog.GetValues()[3];
+
+            if (h % 2 == 0) h++;
+            if (w % 2 == 0) w++;
+
+            if (ColorInitialImage != null)
+            {
+                Image<Gray, byte> tempGrayImage = Tools.Convert(ColorInitialImage);
+                GrayProcessedImage = MorphologicalOperations.MorphDilate(tempGrayImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = MorphologicalOperations.MorphDilate(GrayInitialImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Morphological Erosion
+        private ICommand _erodeCommand;
+        public ICommand ErodeCommand
+        {
+            get
+            {
+                if (_erodeCommand == null)
+                    _erodeCommand = new RelayCommand(ErodeFilter);
+                return _erodeCommand;
+            }
+        }
+
+        private void ErodeFilter(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string> {
+        "Insert Mask Height (h)",
+        "Insert Mask Width (w)",
+        "Insert Threshold (T) [0-255]",
+        "Insert Option (1=White, 0=Black)"
+    };
+
+            DialogWindow dialog = new DialogWindow(_mainVM, labels);
+            dialog.ShowDialog();
+
+            int h = (int)dialog.GetValues()[0];
+            int w = (int)dialog.GetValues()[1];
+            int t = (int)dialog.GetValues()[2];
+            int option = (int)dialog.GetValues()[3];
+
+            if (h % 2 == 0) h++;
+            if (w % 2 == 0) w++;
+
+            if (ColorInitialImage != null)
+            {
+                Image<Gray, byte> tempGrayImage = Tools.Convert(ColorInitialImage);
+                GrayProcessedImage = MorphologicalOperations.MorphErode(tempGrayImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = MorphologicalOperations.MorphErode(GrayInitialImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Morphological Opening
+        private ICommand _openingCommand;
+        public ICommand OpeningCommand
+        {
+            get
+            {
+                if (_openingCommand == null)
+                    _openingCommand = new RelayCommand(OpeningFilter);
+                return _openingCommand;
+            }
+        }
+
+        private void OpeningFilter(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string> {
+        "Insert Mask Height (h)",
+        "Insert Mask Width (w)",
+        "Insert Threshold (T) [0-255]",
+        "Insert Option (1=White, 0=Black)"
+    };
+
+            DialogWindow dialog = new DialogWindow(_mainVM, labels);
+            dialog.ShowDialog();
+
+            int h = (int)dialog.GetValues()[0];
+            int w = (int)dialog.GetValues()[1];
+            int t = (int)dialog.GetValues()[2];
+            int option = (int)dialog.GetValues()[3];
+
+            if (h % 2 == 0) h++;
+            if (w % 2 == 0) w++;
+
+            if (ColorInitialImage != null)
+            {
+                Image<Gray, byte> tempGrayImage = Tools.Convert(ColorInitialImage);
+                GrayProcessedImage = MorphologicalOperations.MorphOpening(tempGrayImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = MorphologicalOperations.MorphOpening(GrayInitialImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
+
+        #region Morphological Closing
+        private ICommand _closingCommand;
+        public ICommand ClosingCommand
+        {
+            get
+            {
+                if (_closingCommand == null)
+                    _closingCommand = new RelayCommand(ClosingFilter);
+                return _closingCommand;
+            }
+        }
+
+        private void ClosingFilter(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string> {
+        "Insert Mask Height (h)",
+        "Insert Mask Width (w)",
+        "Insert Threshold (T) [0-255]",
+        "Insert Option (1=White, 0=Black)"
+    };
+
+            DialogWindow dialog = new DialogWindow(_mainVM, labels);
+            dialog.ShowDialog();
+
+            int h = (int)dialog.GetValues()[0];
+            int w = (int)dialog.GetValues()[1];
+            int t = (int)dialog.GetValues()[2];
+            int option = (int)dialog.GetValues()[3];
+
+            if (h % 2 == 0) h++;
+            if (w % 2 == 0) w++;
+
+            if (ColorInitialImage != null)
+            {
+                Image<Gray, byte> tempGrayImage = Tools.Convert(ColorInitialImage);
+                GrayProcessedImage = MorphologicalOperations.MorphClosing(tempGrayImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                GrayProcessedImage = MorphologicalOperations.MorphClosing(GrayInitialImage, h, w, t, option);
+                ProcessedImage = Convert(GrayProcessedImage);
+            }
+        }
+        #endregion
         #endregion
 
         #region Geometric transformations

@@ -268,13 +268,32 @@
                 </MenuItem>
 
             </MenuItem>
-
             <MenuItem Header="Morphological operations"
           Background="{Binding Path=Theme.MenuItemBackgroundColor}"
           Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
+
+                <MenuItem Header="Dilate"
+              Command="{Binding Path=MenuCommands.DilateCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"
+              Foreground="#1E1E1E"/>
+
+                <MenuItem Header="Erode"
+              Command="{Binding Path=MenuCommands.ErodeCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"
+              Foreground="#1E1E1E"/>
+
+                <MenuItem Header="Opening"
+              Command="{Binding Path=MenuCommands.OpeningCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"
+              Foreground="#1E1E1E"/>
+
+                <MenuItem Header="Closing"
+              Command="{Binding Path=MenuCommands.ClosingCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"
+              Foreground="#1E1E1E"/>
             </MenuItem>
 
-           
+
             <MenuItem Header="Geometric transformations"
                       Background="{Binding Path=Theme.MenuItemBackgroundColor}"
                       Foreground="{Binding Path=Theme.MenuItemForegroundColor}">
