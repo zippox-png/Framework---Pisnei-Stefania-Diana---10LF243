@@ -1517,6 +1517,55 @@ namespace Framework.ViewModel
             }
         }
         #endregion
+
+        #region Connected Components
+        private ICommand _connectedComponentsCommand;
+        public ICommand ConnectedComponentsCommand
+        {
+            get
+            {
+                if (_connectedComponentsCommand == null)
+                    _connectedComponentsCommand = new RelayCommand(ConnectedComponentsFilter);
+                return _connectedComponentsCommand;
+            }
+        }
+
+        private void ConnectedComponentsFilter(object parameter)
+        {
+            if (InitialImage == null)
+            {
+                MessageBox.Show("Please add an image!");
+                return;
+            }
+
+            ClearProcessedCanvas(parameter as Canvas);
+
+            List<string> labels = new List<string> {
+    "Insert Threshold (T) [0-255]"
+};
+
+            DialogWindow dialog = new DialogWindow(_mainVM, labels);
+            dialog.ShowDialog();
+
+            if (dialog.GetValues() == null || dialog.GetValues().Count == 0)
+                return;
+
+            int t = (int)dialog.GetValues()[0];
+
+            if (ColorInitialImage != null)
+            {
+                Image<Gray, byte> tempGrayImage = Tools.Convert(ColorInitialImage);
+
+                Image<Bgr, byte> colorProcessedImage = Algorithms.Sections.MorphologicalOperations.ConnectedComponents(tempGrayImage, t);
+                ProcessedImage = Convert(colorProcessedImage);
+            }
+            else if (GrayInitialImage != null)
+            {
+                Image<Bgr, byte> colorProcessedImage = Algorithms.Sections.MorphologicalOperations.ConnectedComponents(GrayInitialImage, t);
+                ProcessedImage = Convert(colorProcessedImage);
+            }
+        }
+        #endregion
         #endregion
 
         #region Geometric transformations

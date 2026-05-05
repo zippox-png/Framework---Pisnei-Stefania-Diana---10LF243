@@ -291,6 +291,11 @@
               Command="{Binding Path=MenuCommands.ClosingCommand}"
               CommandParameter="{Binding ElementName=processedImageCanvas}"
               Foreground="#1E1E1E"/>
+
+                <MenuItem Header="Connected Components"
+              Command="{Binding Path=MenuCommands.ConnectedComponentsCommand}"
+              CommandParameter="{Binding ElementName=processedImageCanvas}"
+              Foreground="#1E1E1E"/>
             </MenuItem>
 
 

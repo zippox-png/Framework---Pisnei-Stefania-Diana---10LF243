@@ -1,5 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using System;
+using System.Collections.Generic;
 
 namespace Algorithms.Sections
 {
@@ -107,6 +109,67 @@ namespace Algorithms.Sections
             var binary = Binarize(input, T);
             var dilated = DilateLogic(binary, h, w, option);
             return ErodeLogic(dilated, h, w, option);
+        }
+        public static Image<Bgr, byte> ConnectedComponents(Image<Gray, byte> inputImage, int threshold)
+        {
+            Image<Gray, byte> binaryImage = Binarize(inputImage, threshold);
+
+            int width = binaryImage.Width;
+            int height = binaryImage.Height;
+
+            Image<Bgr, byte> resultImage = new Image<Bgr, byte>(width, height);
+            int[,] visited = new int[height, width];
+            Random rand = new Random();
+
+            int[] dx = { -1, 0, 1, -1, 1, -1, 0, 1 };
+            int[] dy = { -1, -1, -1, 0, 0, 1, 1, 1 };
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (binaryImage.Data[y, x, 0] == 255 && visited[y, x] == 0)
+                    {
+                        byte b = (byte)rand.Next(0, 256);
+                        byte g = (byte)rand.Next(0, 256);
+                        byte r = (byte)rand.Next(0, 256);
+
+                        Queue<Tuple<int, int>> queue = new Queue<Tuple<int, int>>();
+                        queue.Enqueue(new Tuple<int, int>(x, y));
+                        visited[y, x] = 1;
+
+                        resultImage.Data[y, x, 0] = b;
+                        resultImage.Data[y, x, 1] = g;
+                        resultImage.Data[y, x, 2] = r;
+
+                        while (queue.Count > 0)
+                        {
+                            Tuple<int, int> current = queue.Dequeue();
+                            int cx = current.Item1;
+                            int cy = current.Item2;
+
+                            for (int i = 0; i < 8; i++)
+                            {
+                                int nx = cx + dx[i];
+                                int ny = cy + dy[i];
+
+                                if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                                {
+                                    if (binaryImage.Data[ny, nx, 0] == 255 && visited[ny, nx] == 0)
+                                    {
+                                        visited[ny, nx] = 1;
+                                        resultImage.Data[ny, nx, 0] = b;
+                                        resultImage.Data[ny, nx, 1] = g;
+                                        resultImage.Data[ny, nx, 2] = r;
+                                        queue.Enqueue(new Tuple<int, int>(nx, ny));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return resultImage;
         }
     }
 }
